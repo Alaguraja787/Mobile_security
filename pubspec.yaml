@@ -1,0 +1,115 @@
+name: mobile_privacy_security_project
+description: "Privacy Sentinel AI - Agentic AI based Android Privacy Monitoring System"
+
+publish_to: 'none'
+
+version: 1.0.0+1
+
+
+environment:
+  sdk: ^3.12.2
+
+
+dependencies:
+
+  flutter:
+    sdk: flutter
+  onnxruntime: ^1.4.1
+
+  # Default Flutter icons
+  cupertino_icons: ^1.0.8
+
+
+  # --------------------------------
+  # NETWORK / BACKEND
+  # --------------------------------
+
+  # Flutter <-> FastAPI Cloud Brain
+  http: ^1.2.2
+
+
+
+  # --------------------------------
+  # LOCAL STORAGE / MEMORY AGENT
+  # --------------------------------
+
+  # Small key-value storage
+  shared_preferences: ^2.3.2
+
+
+  # Local database for privacy history
+  sqflite: ^2.3.3+1
+
+
+  # Database path helper
+  path: ^1.9.0
+
+
+
+  # --------------------------------
+  # ANDROID SYSTEM ACCESS
+  # --------------------------------
+
+  # Runtime permissions
+  permission_handler: ^11.3.1
+
+
+  # Device information
+  device_info_plus: ^10.1.2
+
+
+
+  # --------------------------------
+  # ALERT SYSTEM
+  # --------------------------------
+
+  # Privacy warning notifications
+  flutter_local_notifications: ^17.2.3
+
+
+
+  # --------------------------------
+  # STATE MANAGEMENT
+  # --------------------------------
+
+  # Real-time dashboard updates
+  provider: ^6.1.2
+
+
+
+  # --------------------------------
+  # UTILITIES
+  # --------------------------------
+
+  # Date formatting
+  intl: ^0.19.0
+
+
+
+dev_dependencies:
+
+  flutter_test:
+    sdk: flutter
+
+
+  flutter_lints: ^6.0.0
+
+
+
+flutter:
+
+
+  uses-material-design: true
+
+
+
+  # --------------------------------
+  # APPLICATION ASSETS
+  # --------------------------------
+
+  assets:
+
+  - assets/models/
+  - assets/images/
+  - assets/icons/
+  - assets/animations/
