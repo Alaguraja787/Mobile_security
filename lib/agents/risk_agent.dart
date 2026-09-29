@@ -1,52 +1,50 @@
+import '../guardian/decision/guardian_engine.dart';
+import '../guardian/models/severity_confidence.dart';
+import '../models/app_telemetry.dart';
 import '../models/privacy_event.dart';
+import '../models/risk_assessment.dart';
 
-import '../ml/model_runner.dart';
+/// Legacy adapter for RiskAgent delegating to Phase 3 Guardian Intelligence.
+class RiskAgent {
+  final GuardianEngine guardianEngine;
 
-import '../ml/feature_encoder.dart';
+  RiskAgent({GuardianEngine? guardianEngine})
+      : guardianEngine = guardianEngine ?? GuardianEngine();
 
+  Future<RiskAssessment> analyze(AppTelemetry app, [PrivacyEvent? event]) async {
+    final defaultEvent = event ??
+        PrivacyEvent(
+          timestamp: DateTime.now().toIso8601String(),
+          deviceContext: DeviceContext(),
+          securityContext: SecurityContext(),
+          network: NetworkTelemetry(),
+          sensorTelemetry: SensorPrivacyTelemetry(),
+          usageSummary: UsageSummary(),
+          apps: [app.toJson()],
+        );
 
+    final decision = await guardianEngine.evaluate(app: app, event: defaultEvent);
 
-class RiskAgent{
+    int score;
+    switch (decision.severity) {
+      case GuardianSeverity.CRITICAL:
+        score = 95;
+        break;
+      case GuardianSeverity.HIGH:
+        score = 80;
+        break;
+      case GuardianSeverity.MEDIUM:
+        score = 50;
+        break;
+      case GuardianSeverity.LOW:
+        score = 20;
+        break;
+    }
 
-
-final ModelRunner model=
-
-ModelRunner();
-
-
-
-final FeatureEncoder encoder=
-
-FeatureEncoder();
-
-
-
-
-Future<int> calculateRisk(
-
-PrivacyEvent event
-
-)
-
-async{
-
-
-final features=
-
-encoder.encode(event);
-
-
-
-final risk=
-
-await model.predict(features);
-
-
-
-return risk.toInt();
-
-
-}
-
-
+    return RiskAssessment(
+      score: score,
+      level: decision.severity.name,
+      reason: decision.summary,
+    );
+  }
 }

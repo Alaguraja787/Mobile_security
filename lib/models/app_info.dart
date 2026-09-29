@@ -1,36 +1,58 @@
-class AppInfo{
+class AppInfo {
+  final String name;
+  final String package;
+  final bool isSystemApp;
+  final bool isEnabled;
+  final int uid;
+  final String versionName;
+  final int versionCode;
+  final List<String> permissions;
+  final List<String> grantedPermissions;
+  final List<String> dangerousPermissions;
 
-final String name;
+  AppInfo({
+    required this.name,
+    required this.package,
+    this.isSystemApp = false,
+    this.isEnabled = true,
+    this.uid = -1,
+    this.versionName = "",
+    this.versionCode = 0,
+    required this.permissions,
+    this.grantedPermissions = const [],
+    this.dangerousPermissions = const [],
+  });
 
-final String package;
+  factory AppInfo.fromJson(Map<dynamic, dynamic> data) {
+    return AppInfo(
+      name: data["appName"]?.toString() ?? data["name"]?.toString() ?? "",
+      package:
+          data["packageName"]?.toString() ?? data["package"]?.toString() ?? "",
+      isSystemApp: data["isSystemApp"] == true,
+      isEnabled: data["isEnabled"] != false,
+      uid: (data["uid"] as num?)?.toInt() ?? -1,
+      versionName: data["versionName"]?.toString() ?? "",
+      versionCode: (data["versionCode"] as num?)?.toInt() ?? 0,
+      permissions: List<String>.from(
+          data["requestedPermissions"] ?? data["permissions"] ?? []),
+      grantedPermissions: List<String>.from(data["grantedPermissions"] ?? []),
+      dangerousPermissions:
+          List<String>.from(data["dangerousPermissions"] ?? []),
+    );
+  }
 
-final List<String> permissions;
-
-
-AppInfo({
-
-required this.name,
-
-required this.package,
-
-required this.permissions
-
-});
-
-
-factory AppInfo.fromJson(Map data){
-
-return AppInfo(
-
-name:data["name"],
-
-package:data["package"],
-
-permissions:
-List<String>.from(data["permissions"])
-
-);
-
-}
-
+  Map<String, dynamic> toJson() {
+    return {
+      "name": name,
+      "package": package,
+      "isSystemApp": isSystemApp,
+      "isEnabled": isEnabled,
+      "uid": uid,
+      "versionName": versionName,
+      "versionCode": versionCode,
+      "permissions": permissions,
+      "grantedPermissions": grantedPermissions,
+      "dangerousPermissions": dangerousPermissions,
+    };
+  }
 }

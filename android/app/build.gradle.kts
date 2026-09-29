@@ -45,6 +45,14 @@ android {
 
     }
 
+    buildFeatures {
+        aidl = true
+    }
+
+    aaptOptions {
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
+    }
+
 }
 
 
@@ -72,5 +80,8 @@ dependencies {
     coreLibraryDesugaring(
         "com.android.tools:desugar_jdk_libs:2.1.5"
     )
+
+    implementation("dev.rikka.shizuku:api:13.1.5")
+    implementation("dev.rikka.shizuku:provider:13.1.5")
 
 }

@@ -1,118 +1,130 @@
 import 'package:flutter/material.dart';
 
-import '../models/privacy_event.dart';
-
+import '../models/app_telemetry.dart';
 import '../models/risk_assessment.dart';
 
+class RiskCard extends StatelessWidget {
 
+  final AppTelemetry app;
 
-class RiskCard extends StatelessWidget{
+  final RiskAssessment risk;
 
+  const RiskCard({
 
-final PrivacyEvent event;
+    super.key,
 
+    required this.app,
 
-final RiskAssessment risk;
+    required this.risk,
 
+  });
 
+  @override
+  Widget build(BuildContext context) {
 
+    Color color =
+        risk.score >= 80
+            ? Colors.red
+            : risk.score >= 50
+                ? Colors.orange
+                : Colors.green;
 
-const RiskCard({
+    return Card(
 
-super.key,
+      margin: const EdgeInsets.symmetric(
+        horizontal: 12,
+        vertical: 6,
+      ),
 
-required this.event,
+      child: ListTile(
 
-required this.risk
+        leading: CircleAvatar(
 
-});
+          backgroundColor: color,
 
+          child: const Icon(
+            Icons.security,
+            color: Colors.white,
+          ),
 
+        ),
 
-@override
+        title: Text(
 
-Widget build(BuildContext context){
+          app.appName,
 
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
 
+        ),
 
-Color color =
+        subtitle: Column(
 
-risk.score>70
+          crossAxisAlignment:
+              CrossAxisAlignment.start,
 
-?
+          children: [
 
-Colors.red
+            const SizedBox(height: 6),
 
-:
+            Text(
+              "Package: ${app.packageName}",
+            ),
 
-Colors.green;
+            Text(
+              "Permissions: ${app.permissions.isEmpty ? "None" : app.permissions.join(", ")}",
+            ),
 
+            Text(
+              "Foreground: ${app.foregroundMinutes != null ? "${app.foregroundMinutes!.toStringAsFixed(1)} min" : "Unavailable"}",
+            ),
 
+            Text(
+              "Active: ${app.isActive != null ? (app.isActive! ? "Yes" : "No") : "Unavailable"}",
+            ),
 
+            Text(
+              risk.reason,
+            ),
 
-return Card(
+          ],
 
-child:
+        ),
 
-ListTile(
+        trailing: Container(
 
-leading:
+          padding: const EdgeInsets.all(10),
 
-Icon(
+          decoration: BoxDecoration(
 
-Icons.security,
+            color: color,
 
-color:color
+            borderRadius:
+                BorderRadius.circular(12),
 
-),
+          ),
 
+          child: Text(
 
+            "${risk.score}%",
 
-title:
+            style: const TextStyle(
 
-Text(event.appName),
+              color: Colors.white,
 
+              fontWeight: FontWeight.bold,
 
+            ),
 
-subtitle:
+          ),
 
-Text(
+        ),
 
-"${event.permissions.isEmpty ? "NO PERMISSIONS" : event.permissions.join(", ")}\n${risk.reason}"
+      ),
 
-),
+    );
 
-
-
-
-trailing:
-
-Text(
-
-"${risk.score}%",
-
-style:
-
-TextStyle(
-
-color:color,
-
-fontSize:20
-
-),
-
-),
-
-
-),
-
-
-);
-
-
-
-}
-
-
+  }
 
 }
